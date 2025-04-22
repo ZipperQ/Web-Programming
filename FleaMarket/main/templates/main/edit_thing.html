@@ -1,0 +1,60 @@
+{% extends 'main/base.html' %}
+
+{% block active_home %}
+<a href="{% url 'homepage' %}" class="nav-link" aria-current="page">Главная</a>
+{% endblock %}
+
+{% block active_about %}
+<a href="{% url 'about-us' %}" class="nav-link">О нас</a>
+{% endblock %}
+
+{% block active_create %}
+<a href="{% url 'create' %}" class="nav-link">Создать карточку</a>
+{% endblock %}
+
+{% block active_login %}
+<a href="{% url 'login' %}" class="nav-link">{% if user.is_authenticated %} {{ user.username }} {% else %} Войти {% endif %}</a>
+{% endblock %}
+
+{% block active_profile %}
+<a href="{% if user.is_superuser %}admin/{% elif user.is_authenticated %} {% url 'profile' user.username %} {% endif %}" class="nav-link">{{ user.username }}</a>
+{% endblock %}
+
+{% block edit %}
+
+<style>
+
+  h1 {
+    font-size: 48px;
+    font-weight: bold;
+    background: linear-gradient(to right, #c6baf7, #39258a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+</style>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-6 mx-auto">
+      <h1>Редактирование карточки</h1>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Сохранить изменения</button>
+        <a href="{% url 'profile' request.user.username %}" class="btn btn-secondary">Отмена</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=8b394eab-2123-45bb-89b3-c9e704fcbe37&suggest_apikey=cd2e2834-6675-4212-be6c-b8054c5a0127" type="text/javascript"></script>
+
+<!-- JavaScript для подсказок адресов -->
+<script type="text/javascript">
+    ymaps.ready(function () {
+        var suggestView = new ymaps.SuggestView('address-input');
+    });
+</script>
+
+{% endblock %}

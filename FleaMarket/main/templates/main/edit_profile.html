@@ -1,0 +1,66 @@
+{% extends 'main/base.html' %}
+
+{% block active_home %}
+<a href="{% url 'homepage' %}" class="nav-link" aria-current="page">Главная</a>
+{% endblock %}
+
+{% block active_about %}
+<a href="{% url 'about-us' %}" class="nav-link">О нас</a>
+{% endblock %}
+
+{% block active_create %}
+<a href="{% url 'create' %}" class="nav-link">Создать карточку</a>
+{% endblock %}
+
+{% block active_login %}
+<a href="{% url 'login' %}" class="nav-link">{% if user.is_authenticated %} {{ user.username }} {% else %} Войти {% endif %}</a>
+{% endblock %}
+
+{% block active_profile %}
+<a href="{% if user.is_superuser %}admin/{% elif user.is_authenticated %} {% url 'profile' user.username %} {% endif %}" class="nav-link">{{ user.username }}</a>
+{% endblock %}
+
+{% block edit_profile %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Карточка с заголовком и формой -->
+            <div class="card shadow-sm">
+                <div class="card-header text-center">
+                    <h1 class="h3">Изменение данных профиля</h1>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <!-- Форматирование полей формы в ряд -->
+                        <div class="mb-3">
+                            {{ user_form.non_field_errors }}
+                        </div>
+
+                        {% for field in user_form %}
+                        <div class="mb-3">
+
+                                {{ field.label_tag }}
+
+                            {{ field }}
+                            <div class="form-text text-danger">
+                                {{ field.errors }}
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <!-- Submit button -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-save"></i> Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

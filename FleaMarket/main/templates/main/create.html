@@ -1,0 +1,130 @@
+{% extends 'main/base.html' %}
+
+{% block active_home %}
+<a href="{% url 'homepage' %}" class="nav-link" aria-current="page">Главная</a>
+{% endblock %}
+
+{% block active_about %}
+<a href="{% url 'about-us' %}" class="nav-link">О нас</a>
+{% endblock %}
+
+{% block active_create %}
+<a href="{% url 'create' %}" class="nav-link active">Создать карточку</a>
+{% endblock %}
+
+{% block active_login %}
+<a href="{% url 'login' %}" class="nav-link">{% if user.is_authenticated %} {{ user.username }} {% else %} Войти {% endif %}</a>
+{% endblock %}
+
+{% block active_profile %}
+<a href="{% if user.is_superuser %}admin/{% elif user.is_authenticated %} {% url 'profile' user.username %} {% endif %}" class="nav-link">{{ user.username }}</a>
+{% endblock %}
+
+
+{% block create %}
+
+<style>
+    .product-card {
+        max-width: 700px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        background-color: transparent;
+    }
+
+    .btn-primary {
+        width: 700px;
+    }
+
+    h2 {
+    font-size: 48px;
+    font-weight: bold;
+    background: linear-gradient(to right, #c6baf7, #39258a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+    /* Изменение цвета текста для всех <label> элементов в форме */
+    label {
+        background: linear-gradient(to right, #39258a, #39258a);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-weight: bold;
+    }
+
+.custom-btn-submit {
+    background: linear-gradient(to right, #c6baf7, #9162b3);
+    color: #fff;
+    width: 700px;
+}
+
+.custom-btn-submit:hover {
+    background: linear-gradient(to right, #c6baf7, #9162b3);
+    color: #fff;
+}
+
+/* Изменение цвета текста для всех <input> элементов в форме */
+input, select, textarea {
+    <!--background: linear-gradient(to right, #c6baf7, #c6abeb);
+    color: transparent;
+    font-weight: bold;
+}
+
+</style>
+
+    <div class="container">
+        <div class="product-card">
+            <h2 class="text-center">Создание карточки</h2>
+
+            <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <!-- Save and Cancel Buttons -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn custom-btn-submit">Создать карточку</button>
+                <!--<button type="button" class="btn btn-secondary" width>Cancel</button>-->
+            </div>
+            </form>
+        </div>
+    </div>
+
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=8b394eab-2123-45bb-89b3-c9e704fcbe37&suggest_apikey=cd2e2834-6675-4212-be6c-b8054c5a0127" type="text/javascript"></script>
+
+<!-- Добавляем JavaScript для подсказок адресов -->
+<script type="text/javascript">
+    ymaps.ready(function () {
+        var suggestView = new ymaps.SuggestView('address-input');  // Привязываем подсказки к полю с id="address-input"
+    });
+</script>
+
+<!-- JavaScript code to format a phone number -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const phoneInput = document.getElementById('phone-input');
+
+        phoneInput.addEventListener('input', function (event) {
+            let input = phoneInput.value.replace(/\D/g, '');
+
+            if (input.length > 0) {
+                input = input.substring(0, 11);
+                const part1 = input.substring(0, 1); // X
+                const part2 = input.substring(1, 4); // XXX
+                const part3 = input.substring(4, 7); // XXX
+                const part4 = input.substring(7, 9); // XX
+                const part5 = input.substring(9, 11); // XX
+
+                // Template X (XXX) XXX XX-XX
+                phoneInput.value = `${part1} (${part2}) ${part3} ${part4}-${part5}`;
+            }
+        });
+    });
+</script>
+
+{% endblock %}
+

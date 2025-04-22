@@ -1,0 +1,52 @@
+{% extends 'main/base.html' %}
+
+{% block active_home %}
+<a href="{% url 'homepage' %}" class="nav-link" aria-current="page">Главная</a>
+{% endblock %}
+
+{% block active_about %}
+<a href="{% url 'about-us' %}" class="nav-link active">О нас</a>
+{% endblock %}
+
+{% block active_create %}
+<a href="{% url 'create' %}" class="nav-link">Создать карточку</a>
+{% endblock %}
+
+{% block active_login %}
+<a href="{% url 'login' %}" class="nav-link">{% if user.is_authenticated %} {{ user.username }} {% else %} Войти {% endif %}</a>
+{% endblock %}
+
+
+{% block active_profile %}
+<a href="{% if user.is_superuser %}admin/{% elif user.is_authenticated %} {% url 'profile' user.username %} {% endif %}" class="nav-link">{{ user.username }}</a>
+{% endblock %}
+
+
+{%block about %}
+
+<style>
+    .about {
+        width: 1300px;
+        margin: 0 auto;
+    }
+
+    h1 {
+    font-size: 48px;
+    font-weight: bold;
+    background: linear-gradient(to right, #8674cf, #39258a); /* Gradient from pink to orange */
+    -webkit-background-clip: text;  /* WebKit support */
+    background-clip: text;
+    color: transparent;             /* Transparent color to see the background */
+}
+
+</style>
+
+<div class="container">
+    <div class="about">
+        <h1>
+            Здравствуйте! Этот сайт предназначен для обмена ненужными вещами или их дарения.
+        </h1>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'main/base.html' %}
+
+{% block active_home %}
+<a href="{% url 'homepage' %}" class="nav-link" aria-current="page">Главная</a>
+{% endblock %}
+
+{% block active_about %}
+<a href="{% url 'about-us' %}" class="nav-link">О нас</a>
+{% endblock %}
+
+{% block active_create %}
+<a href="{% url 'create' %}" class="nav-link">Создать карточку</a>
+{% endblock %}
+
+{% block active_login %}
+<a href="{% url 'login' %}" class="nav-link">{% if user.is_authenticated %} {{ user.username }} {% else %}Войти{% endif %}</a>
+{% endblock %}
+
+{% block active_profile %}
+<a href="{% if user.is_superuser %}admin/{% elif user.is_authenticated %} {% url 'profile' user.username %} {% endif %}" class="nav-link active">{{ user.username }}</a>
+{% endblock %}
+
+{% block profile %}
+
+<style>
+      .card {
+    margin-bottom: 20px;
+    }
+
+    .list-group-item {
+    padding: 15px 20px;
+    }
+
+    .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.875rem;
+    }
+
+  h1 {
+    font-size: 48px;
+    font-weight: bold;
+    background: linear-gradient(to right, #c6baf7, #39258a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+</style>
+
+<h1 class="text-center">Профиль пользователя {{ user_profile.username }}</h1>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <div class="card mb-4">
+        <div class="card-body text-center">
+          <h4 class="card-title">{{ user_profile.username }}</h4>
+          <p class="card-text">{{ user_profile.email }}</p>
+          <p class="text-muted">Дата регистрации: {{ user_profile.date_joined }}</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h3>Личный кабинет</h3>
+          <p>Здравствуйте, {{ user.username }}!</p>
+
+          <h4>Ваши карточки:</h4>
+          <ul class="list-group">
+            {% for product in products %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ product.name }}</strong> - {{ product.address }}
+                  <p>{{ product.contact }}</p>
+                  <p class="text-muted">Дата создания: {{ product.created_at }}</p>
+                </div>
+                <div>
+                  <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-sm me-2">Посмотреть</a>
+                  <a href="{% url 'edit_product' product.id %}" class="btn btn-warning btn-sm me-2">Редактировать</a>
+                  <a href="{% url 'delete_product' product.id %}" class="btn btn-danger btn-sm">Удалить</a>
+                </div>
+              </li>
+            {% empty %}
+              <li class="list-group-item">
+                У вас пока нет карточек. <a href="{% url 'create' %}" class="btn btn-primary btn-sm me-2">Имеете ненужную вещь? Создайте карточку прямо сейчас!</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

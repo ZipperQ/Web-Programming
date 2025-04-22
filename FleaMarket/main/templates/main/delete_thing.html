@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+
+{% block active_home %}
+<a href="{% url 'homepage' %}" class="nav-link" aria-current="page">Главная</a>
+{% endblock %}
+
+{% block active_about %}
+<a href="{% url 'about-us' %}" class="nav-link">О нас</a>
+{% endblock %}
+
+{% block active_create %}
+<a href="{% url 'create' %}" class="nav-link">Создать карточку</a>
+{% endblock %}
+
+{% block active_login %}
+<a href="{% url 'login' %}" class="nav-link">{% if user.is_authenticated %} {{ user.username }} {% else %} Войти {% endif %}</a>
+{% endblock %}
+
+{% block active_profile %}
+<a href="{% if user.is_superuser %}admin/{% elif user.is_authenticated %} {% url 'profile' user.username %} {% endif %}" class="nav-link">{{ user.username }}</a>
+{% endblock %}
+
+{% block delete %}
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-6 mx-auto">
+      <h2>Удаление карточки</h2>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Сохранить изменения</button>
+        <a href="{% url 'profile' request.user.username %}" class="btn btn-secondary">Отмена</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

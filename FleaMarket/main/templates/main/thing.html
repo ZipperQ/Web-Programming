@@ -1,0 +1,231 @@
+{% extends 'main/base.html' %}
+
+{% block active_home %}
+<a href="{% url 'homepage' %}" class="nav-link" aria-current="page">Главная</a>
+{% endblock %}
+
+{% block active_about %}
+<a href="{% url 'about-us' %}" class="nav-link">О нас</a>
+{% endblock %}
+
+{% block active_create %}
+<a href="{% url 'create' %}" class="nav-link">Создать карточку</a>
+{% endblock %}
+
+{% block active_login %}
+<a href="{% url 'login' %}" class="nav-link">{% if user.is_authenticated %} {{ user.username }} {% else %} Войти {% endif %}</a>
+{% endblock %}
+
+{% block active_profile %}
+<a href="{% if user.is_superuser %}admin/{% elif user.is_authenticated %} {% url 'profile' user.username %} {% endif %}" class="nav-link">{{ user.username }}</a>
+{% endblock %}
+
+{% block thing %}
+
+<style>
+        .chat-messages {
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .message {
+      padding: 10px;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+  h1 {
+    font-size: 48px;
+    font-weight: bold;
+    background: linear-gradient(to right, #2f1542, #666e1f, #a9b357);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-align: center;
+}
+
+  .card-header {
+  background: linear-gradient(to right, #c6baf7, #9162b3);
+    color: #fff;
+
+  }
+
+  .custom-btn-submit {
+    background: linear-gradient(to right, #c6baf7, #9162b3);
+    color: #fff;
+    width: 600px;
+}
+
+.custom-btn-submit:hover {
+    background: linear-gradient(to right, #c6baf7, #9162b3);
+    color: #fff;
+}
+
+  .textarea {
+  height: 20px;
+  }
+
+  h5 {
+
+    font-weight: bold;
+    background: linear-gradient(to right, #2f1542, #666e1f, #a9b357);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-align: center;
+}
+
+.chat-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.chat-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.chat-link:visited {
+    color: #6c757d;
+}
+
+.chat-link.unread {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+</style>
+
+<div class="container mt-5">
+  <div class="row">
+    <!-- Item card -->
+    <div class="col-md-6">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header">
+          <h1 class="card-title text-center">{{ product.name }}</h1>
+        </div>
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+          {% else %}
+          <img src="https://via.placeholder.com/300" class="card-img-top" alt="Фото товара">
+          {% endif %}
+        <div class="card-body">
+          <p><strong>Категория:</strong> {{ product.category }}</p>
+          <p><strong>Адрес:</strong> {{ product.address }}</p>
+          <p><strong>Контакт:</strong> {{ product.contact }}</p>
+          <p><strong>Пользователь:</strong> {{ product.owner }}</p>
+          <p><strong>Заметка владельца:</strong> {{ product.notes }}</p>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Chat with item owner -->
+    {% if chat and chat.participant %}
+<div class="col-md-6">
+  <div class="card mb-4 shadow-sm">
+    <div class="card-header bg-success text-white">
+      {% if request.user != product.owner %}
+        <h2 class="card-title text-center">Чат с {{ product.owner }}</h2>
+      {% elif chat.participant %}
+        <h2 class="card-title text-center">Чат с {{ chat.participant.username }}</h2>
+      {% else %}
+        <h2 class="card-title text-center">Вы просматриваете свой товар</h2>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      <!-- Вывод всех сообщений в чате -->
+      <div id="chat-messages" class="chat-messages mb-3" style="max-height: 300px; overflow-y: auto;">
+        {% if chat %}
+          {% for message in messages %}
+            <div class="message py-2">
+              <div class="d-flex justify-content-between">
+                <strong>{{ message.sender.username }}:</strong>
+                <small class="text-muted">{{ message.timestamp|date:"d.m.Y H:i" }}</small>
+              </div>
+              <p>{{ message.content }}</p>
+            </div>
+            <hr>
+          {% endfor %}
+        {% else %}
+          <p>Нет сообщений.</p>
+        {% endif %}
+      </div>
+
+      {% if chat %}
+        <form method="post" class="d-flex flex-column">
+          {% csrf_token %}
+          <div class="form-group mb-2">
+            {{ form.content }}
+          </div>
+
+          <div class="mt-auto">
+            <button type="submit" class="custom-btn-submit">Отправить</button>
+          </div>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+    {% endif %}
+
+
+
+    <!-- Если пользователь — владелец товара, выводим список всех чатов -->
+{% if product.owner == request.user %}
+      <div class="col-md-6">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-info text-white">
+            <h2 class="card-title text-center">Все чаты для этой карточки:</h2>
+          </div>
+          <div class="card-body">
+            <ul class="list-group">
+              {% if all_chats %}
+              {% for c in all_chats %}
+                <li class="list-group-item">
+                  <a href="{% url 'product_detail' product.id %}?chat_id={{ c.id }}" class="chat-link {% if c.unread_count > 0 %}unread{% endif %}">
+                    Чат с {{ c.participant.username }} ({{ c.unread_count }} непрочитанных)
+                  </a>
+                </li>
+              {% endfor %}
+              {% else %}
+
+            <h5>Вам пока никто не написал.</h5>
+            {% endif %}
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+
+
+<h1 class="mb-4">Посмотрите на карте, где находится интересующий вас товар!</h1>
+<!-- Встроенная Яндекс Карта -->
+<div style="width: 100%; height: 650px;">
+  <!--<h5> Посмотрите местоположение вещи на карте: </h5>-->
+    <iframe
+        src="https://yandex.ru/map-widget/v1/?text={{ product.address }}"
+        width="100%"
+        height="600"
+        frameborder="1"
+        allowfullscreen="allowfullscreen">
+    </iframe>
+</div>
+  </div>
+</div>
+
+<!-- JavaScript для автоматической прокрутки в конец -->
+<script>
+    // После загрузки страницы или обновления сообщений, прокручиваем чат вниз
+    const chatMessages = document.getElementById('chat-messages');
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+</script>
+
+{% endblock %}
