@@ -14,3 +14,5 @@ Password: Qwerty1853
 
 Login: TheFirstUser1
 Password: ZipperStyle365
+
+Ссылка на Telegram внизу справа на сайте ведёт на моего бота, который никак не связан с сайтом и служит просто как "декоративный" элемент
