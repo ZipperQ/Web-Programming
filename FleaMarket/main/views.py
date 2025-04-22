@@ -149,7 +149,7 @@ def delete_product(request, product_id):
 
 
 @login_required
-def edit_profile(request):
+def edit_profile(request, username):
     if request.method == 'POST':
         user_form = CustomUserChangeForm(request.POST, instance=request.user)
         if user_form.is_valid():
