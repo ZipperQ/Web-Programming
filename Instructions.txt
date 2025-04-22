@@ -1,0 +1,16 @@
+В корне проекта выполните следующие команды:
+
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+
+Доступные аккаунты (можно также создать и новый аккаунт):
+
+Login: PhoneUser
+Password: someUser123
+
+Login: UserLaptop2
+Password: Qwerty1853
+
+Login: TheFirstUser1
+Password: ZipperStyle365
