@@ -1,3 +1,5 @@
+{% load static %}
+
 <!doctype html>
 <html lang="ru">
 <head>
@@ -17,140 +19,8 @@
 
 </head>
 
-<style>
-body {
-    background: linear-gradient(to right, #cdaae6, #e8aa74, #f2ddcb);  /* Transition from blue to light */
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    min-height: 100vh; /* Чтобы фон покрывал всю высоту экрана */
-}
-</style>
-
 <body>
-
-<style>
-
-.nav-item.dropdown:hover .dropdown-menu {
-  display: block;
-  }
-
-    html, body {
-    height: 100%;
-    margin: 0;
-}
-
-/* Main container of the page */
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    border: 1px solid #333;
-        border-radius: 80px;
-}
-
-/* Контент растягивается на всё свободное пространство */
-.content {
-    flex: 1;
-    padding: 20px;
-}
-
-/* Footer */
-.footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    font-size: 14px;
-}
-
-/* For footer links */
-.footer a {
-    color: #fff;
-    text-decoration: none;
-    margin: 0 10px;
-}
-
-.footer a:hover {
-    text-decoration: underline;
-}
-
-header {
-    background-color: #333;
-    color: #000;
-}
-
-    span {
-    background: linear-gradient(to right, #c6baf7, #a78fc9); /* Градиент от розового к оранжевому */
-    -webkit-background-clip: text;  /* Поддержка для WebKit браузеров (Chrome, Safari) */
-    background-clip: text;          /* Для других браузеров */
-    color: transparent;             /* Прозрачный цвет текста, чтобы был виден фон */
-}
-
-    .nav-link {
-    background: linear-gradient(to right, #fff, #fff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: #ddd;
-    }
-
-    .nav-item a:hover {
-    background: linear-gradient(to right, #c6baf7, #9162b3);
-    color: #fff;
-}
-
-.nav-link.active {
-    background: linear-gradient(to right, #a685d4, #9162b3);
-    color: #fff;
-    }
-
-    .custom-btn {
-        background: linear-gradient(to right, #c6baf7, #9162b3);
-    color: #fff;
-    }
-
-    .custom-btn:hover {
-        background: linear-gradient(to right, #c6baf7, #9162b3);
-    color: #fff;
-    }
-
-    .dropdown-menu {
-        background-color: #343a40; /* Dropdown menu background color */
-        color: white;
-    }
-
-    .dropdown-menu .dropdown-item {
-        color: white; /* Цвет текста ссылок */
-    }
-
-    .dropdown-menu .dropdown-item:hover {
-        background-color: #495057;
-        color: #f8f9fa;
-    }
-
-    /* Header start position */
-.header {
-  width: 100%;
-  background-color: #f8f9fa;
-  z-index: 10;
-  position: relative;
-  top: 0; /* Исходное значение top */
-  transition: top 0.3s ease, box-shadow 0.3s ease; /* Transition for top & box-shadow */
-}
-
-/* Липкая шапка, когда она фиксирована */
-.sticky {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow */
-  transition: top 0.3s ease, box-shadow 0.3s ease;
-}
-
-</style>
-
+<link rel="stylesheet" href="{% static 'main/styles.css' %}">
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom" style="width: 100%;">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
         <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
@@ -190,27 +60,6 @@ header {
         </form>
 
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <style>
-        .telegram-link {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            background-color: #0088cc;
-            padding: 10px;
-            border-radius: 50%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
-        .telegram-link i {
-            color: white;
-            font-size: 24px;
-        }
-
-        .telegram-link:hover {
-            background-color: #007bb5;
-        }
-    </style>
 
     </header>
 
